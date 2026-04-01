@@ -1,0 +1,23 @@
+name: Deploy to Streamlit Cloud
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Validate app loads
+        run: python -c "from config.database import init_db; init_db(); print('DB OK')"
+      - name: Check Streamlit config
+        run: |
+          test -f app.py && echo "app.py exists"
+          test -f .streamlit/config.toml && echo "Streamlit config exists"
+          echo "Ready for Streamlit Cloud deployment"
