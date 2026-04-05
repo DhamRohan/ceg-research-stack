@@ -31,12 +31,22 @@ CEG_PNODE_PATTERNS = {
 }
 
 def _get_pjm():
-    """Get PJM gridstatus instance. Import here to avoid import errors when gridstatus not installed."""
+    """Get PJM gridstatus instance with API key from secrets/env."""
     try:
         from gridstatus import PJM
-        return PJM()
     except ImportError:
         print("  WARNING: gridstatus not installed. Run: pip install gridstatus")
+        return None
+    try:
+        from config.secrets import _get
+        api_key = _get("PJM_API_KEY")
+        if not api_key:
+            print("  WARNING: PJM_API_KEY not set — skipping PJM LMP collection")
+            print("  Register free at: https://apiportal.pjm.com")
+            return None
+        return PJM(api_key=api_key)
+    except Exception as e:
+        print(f"  WARNING: Could not initialize PJM client: {e}")
         return None
 
 def _filter_ceg_nodes(df: pd.DataFrame) -> pd.DataFrame:
