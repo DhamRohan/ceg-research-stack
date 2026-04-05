@@ -20,7 +20,7 @@ def _get(key: str, default: str = "") -> str:
 # --- API Keys ---
 EIA_API_KEY = _get("EIA_API_KEY")
 FRED_API_KEY = _get("FRED_API_KEY")
-PJM_API_KEY = _get("PJM_API_KEY")
+PJM_SUBSCRIPTION_KEY = _get("PJM_SUBSCRIPTION_KEY") or _get("PJM_API_KEY")  # Ocp-Apim-Subscription-Key for api.pjm.com
 ERCOT_SUBSCRIPTION_KEY = _get("ERCOT_SUBSCRIPTION_KEY")
 ERCOT_USERNAME = _get("ERCOT_USERNAME")
 ERCOT_PASSWORD = _get("ERCOT_PASSWORD")
